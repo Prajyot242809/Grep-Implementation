@@ -25,7 +25,7 @@ void print_grep_match
         prefix += filename + ":";
     }
 
-    if(flag.show_line_numbers)
+    if(flags.show_line_numbers)
     {
         prefix += std::to_string(line_number) + ":";
     }
@@ -43,7 +43,7 @@ void print_grep_match
     while ((pos = colored.find(pattern, pos)) != std::string::npos)
     {
         colored.insert(pos, ansi::RED);
-        pos += ansi::RED.length() + patteren.length();
+        pos += ansi::RED.length() + pattern.length();
         colored.insert(pos, ansi::RESET);
         pos += ansi::RESET.length();
     }

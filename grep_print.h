@@ -1,4 +1,4 @@
-#infndef GREP_PRINT_H
+#ifndef GREP_PRINT_H
 #define GREP_PRINT_H
 
 #include <string>
@@ -10,7 +10,7 @@ void print_grep_match
  int line_number,
  const std::string& line,
  const std::string& pattern,
- const GrepFlag& flags,
+ const GrepFlags& flags,
  bool multiple_files
 );
 
