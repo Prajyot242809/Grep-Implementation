@@ -5,7 +5,7 @@
 namespace ansi
 {
     const std::string RESET = "\033[0m";
-    const std::string RED   = "\033[31m";
+    const std::string CYAN   = "\033[1;36m";
 
 }
 
@@ -42,8 +42,8 @@ void print_grep_match
 
     while ((pos = colored.find(pattern, pos)) != std::string::npos)
     {
-        colored.insert(pos, ansi::RED);
-        pos += ansi::RED.length() + pattern.length();
+        colored.insert(pos, ansi::CYAN);
+        pos += ansi::CYAN.length() + pattern.length();
         colored.insert(pos, ansi::RESET);
         pos += ansi::RESET.length();
     }

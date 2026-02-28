@@ -1,51 +1,55 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <vector>
 
 #include "grep_flags.h"
 #include "grep_print.h"
 
+
 int main(int argc, char* argv[])
 {
+    
     if (argc < 2) 
     {
-        std::cerr << "Usage: " << argv[0] << " PATTERN [-n] [--color] [file1 file2 ...]\n";
-        std::cerr << "  -n       \tshow line numbers\n";
-        std::cerr << "  --color  \thighlight matches in red\n";
-        std::cerr << "Examples:\n";
-        std::cerr << "  " << argv[0] << " hello file.txt\n";
-        std::cerr << "  echo \"hello world\" | " << argv[0] << " hello -n --color\n";
+        std::cerr << "Usage: " << argv[0] << " PATTERN [flags] [file1 file2 ...]\n";
+        std::cerr << "Flags you can use: -n, --color\n";
+        std::cerr << "You can put flags anywhere after the pattern – super flexible!\n";
+        std::cerr << "Quick examples:\n";
+        std::cerr << "  " << argv[0] << " hello file.txt -n --color\n";
+        std::cerr << "  " << argv[0] << " -n hello test.txt\n";
+        std::cerr << "  echo \"hello world\" | " << argv[0] << " hello --color\n";
         return 1;
     }
 
+    // Flags
     GrepFlags flags;
-    std::string pattern = argv[1];
-    int file_start = 2;
 
-    // Parse flags (simple loop - stops when non-flag argument is found)
-    while (file_start < argc) 
+    std::string pattern = argv[1];
+    std::vector<std::string> files;
+
+    for (int i = 2; i < argc; ++i) 
     {
-        std::string arg = argv[file_start];
+        std::string arg = argv[i];
+
         if (arg == "-n") 
         {
             flags.show_line_numbers = true;
-            file_start++;
         }
         else if (arg == "--color") 
         {
             flags.color_highlight = true;
-            file_start++;
         }
         else 
         {
-            break;  // this should be the first filename (or end of args)
+            files.push_back(arg);
         }
     }
 
-    bool multiple_files = (argc - file_start > 1);
+    bool multiple_files = (files.size() > 1);
 
-    // === Case 1: No files provided → read from stdin ===
-    if (file_start == argc) 
+    // No files given for pattern matching
+    if (files.empty()) 
     {
         std::string line;
         int line_num = 0;
@@ -61,10 +65,8 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    // === Case 2: One or more files provided ===
-    for (int i = file_start; i < argc; ++i) 
+    for (const auto& filename : files) 
     {
-        std::string filename = argv[i];
         std::ifstream file(filename);
 
         if (!file.is_open()) 
@@ -84,8 +86,6 @@ int main(int argc, char* argv[])
                 print_grep_match(filename, line_num, line, pattern, flags, multiple_files);
             }
         }
-
-        file.close();  // good practice, though destructor would close it anyway
     }
 
     return 0;
