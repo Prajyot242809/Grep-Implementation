@@ -1,6 +1,7 @@
 #include "grep_print.h"
 #include <algorithm>
 #include <iostream>
+#include <system_error>
 
 //ANSI color codes to add
 namespace ansi
@@ -57,12 +58,20 @@ void print_grep_match
 
     // Color version(highlight pattern occurrences)
     std::string colored = line;
+    std::string search_text = line;
+    std::string search_pat = line;
+
+    if (flags.case_insensitive)
+    {
+        std::transform(search_text.begin(), search_text.end(), search_text.begin(), ::tolower);
+        std::transform(search_pat.begin(), search_pat.end(), search_pat.begin(), ::tolower);
+    }
     size_t pos = 0;
 
     while ((pos = colored.find(pattern, pos)) != std::string::npos)
     {
         colored.insert(pos, ansi::CYAN);
-        pos += ansi::CYAN.length() + pattern.length();
+        pos += ansi::CYAN.length() + search_pat.length();
         colored.insert(pos, ansi::RESET);
         pos += ansi::RESET.length();
     }
