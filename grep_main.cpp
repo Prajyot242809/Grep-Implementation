@@ -13,12 +13,12 @@ int main(int argc, char* argv[])
     if (argc < 2) 
     {
         std::cerr << "Usage: " << argv[0] << " PATTERN [flags] [file1 file2 ...]\n";
-        std::cerr << "Flags you can use: -n, --color\n";
-        std::cerr << "You can put flags anywhere after the pattern – super flexible!\n";
-        std::cerr << "Quick examples:\n";
-        std::cerr << "  " << argv[0] << " hello file.txt -n --color\n";
-        std::cerr << "  " << argv[0] << " -n hello test.txt\n";
-        std::cerr << "  echo \"hello world\" | " << argv[0] << " hello --color\n";
+        std::cerr << "Flags you can use: -n, --color, -i, -v\n";
+        std::cerr << "-n show line numbers\n";
+        std::cerr << "--color highlight matches\n";
+        std::cerr << "-i case-insensitive search\n";
+        std::cerr << "-v show lines that do NOT match\n";
+        std::cerr << "Flags can be anywhere after PATTERN.\n";
         return 1;
     }
 
@@ -39,6 +39,14 @@ int main(int argc, char* argv[])
         else if (arg == "--color") 
         {
             flags.color_highlight = true;
+        }
+        else if (arg == "-i")
+        {
+            flags.case_insensitive = true;
+        }
+        else if (arg == "-v")
+        {
+            flags.invert_match = true;
         }
         else 
         {
@@ -80,11 +88,10 @@ int main(int argc, char* argv[])
 
         while (std::getline(file, line)) 
         {
-            ++line_num;
-            if (line.find(pattern) != std::string::npos) 
-            {
-                print_grep_match(filename, line_num, line, pattern, flags, multiple_files);
-            }
+            ++line_num; 
+            
+            print_grep_match(filename, line_num, line, pattern, flags, multiple_files);
+            
         }
     }
 

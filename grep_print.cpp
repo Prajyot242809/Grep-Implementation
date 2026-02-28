@@ -1,4 +1,5 @@
 #include "grep_print.h"
+#include <algorithm>
 #include <iostream>
 
 //ANSI color codes to add
@@ -19,6 +20,24 @@ void print_grep_match
  bool multiple_files
  )
 {
+    std::string text_to_check = line;
+    std::string pat_to_check  = pattern;
+
+    if (flags.case_insensitive)
+    {
+        std::transform(text_to_check.begin(), text_to_check.end(), text_to_check.begin(), ::tolower);
+        std::transform(pat_to_check.begin(), pat_to_check.end(), pat_to_check.begin(), ::tolower);
+    }
+    bool matches = (text_to_check.find(pat_to_check) != std::string::npos);
+    if (flags.invert_match)
+    {
+        matches = !matches;
+    }
+    if (!matches)
+    {
+        return;
+    }
+
     std::string prefix;
     if(multiple_files)
     {

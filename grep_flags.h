@@ -4,7 +4,9 @@
 struct GrepFlags
 {
     bool show_line_numbers = false;
-    bool color_highlight = false;
+    bool color_highlight   = false;
+    bool case_insensitive  = false;
+    bool invert_match      = false;
 };
 
 #endif

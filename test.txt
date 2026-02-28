@@ -1,7 +1,7 @@
 hello world
 this is a TEST
-hello again
+Hello again
 more hello here
 hello how are you
 are you ok 
-hello there
+Hello there
