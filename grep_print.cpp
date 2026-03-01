@@ -59,7 +59,7 @@ void print_grep_match
     // Color version(highlight pattern occurrences)
     std::string colored = line;
     std::string search_text = line;
-    std::string search_pat = line;
+    std::string search_pat = pattern;
 
     if (flags.case_insensitive)
     {
@@ -68,7 +68,7 @@ void print_grep_match
     }
     size_t pos = 0;
 
-    while ((pos = colored.find(pattern, pos)) != std::string::npos)
+    while ((pos = search_text.find(search_pat, pos)) != std::string::npos)
     {
         colored.insert(pos, ansi::CYAN);
         pos += ansi::CYAN.length() + search_pat.length();
